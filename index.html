@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Color Clock</title>
+
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+
+            body {
+                display:            flex;
+                flex-direction:     row;
+                justify-content:    center;
+                align-items:        stretch;
+                padding:            0 0.67%;
+                background-color: #e6e6e6;
+            }
+
+            .color {
+                width:      32%;
+                margin:     1.33% 0.67%;
+                padding:    0.67%;
+                border:     1px solid #262626;
+                font-size:  2vmax;
+                text-align: center;
+            }
+        </style>
+
+        <script>
+            window.onload = function() {
+                window.setInterval(tick, 250)
+            }
+
+            function tick() {
+                getTime()
+
+            }
+
+            function getTime() {
+                const time = new Date()
+                const hr   = { v: time.getHours(),   max: 24 }
+                const min  = { v: time.getMinutes(), max: 60 }
+                const sec  = { v: time.getSeconds(), max: 60 }
+
+                const data = { hr, min, sec }
+                let val, max, hue, elem
+
+                for(let unit in data) {
+                    elem = document.getElementById(unit)
+                    val  = data[unit].v
+                    max  = data[unit].max
+                    hue  = getHue(val, max)
+                    
+                    if(!elem) { return }
+                    elem.innerText = '● '.repeat(val)
+                    elem.style.backgroundColor = 'hsl(' + hue + ', 70%, 60%)'
+                    elem.style.color           = 'hsl(' + hue + ', 70%, 40%)'
+                    elem.style.borderColor     = 'hsl(' + hue + ', 70%, 40%)'
+                }
+            }
+
+            function getHue(value, max) {
+                return Math.round((value / max) * 360)
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class='color' id='hr' ></div>
+        <div class='color' id='min'></div>
+        <div class='color' id='sec'></div>
+    </body>
+</html>
